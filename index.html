@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Studio Hub - Shadcn UI Style</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config để giả lập Shadcn Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- CSS Variables cho Shadcn Zinc Theme (Dark Mode Default) -->
+    <style>
+        :root {
+            --radius: 0.5rem;
+        }
+        
+        .dark {
+            --background: 240 10% 3.9%;
+            --foreground: 0 0% 98%;
+            --card: 240 10% 3.9%;
+            --card-foreground: 0 0% 98%;
+            --popover: 240 10% 3.9%;
+            --popover-foreground: 0 0% 98%;
+            --primary: 263.4 70% 50.4%; /* VS Purple */
+            --primary-foreground: 210 40% 98%;
+            --secondary: 240 3.7% 15.9%;
+            --secondary-foreground: 0 0% 98%;
+            --muted: 240 3.7% 15.9%;
+            --muted-foreground: 240 5% 64.9%;
+            --accent: 240 3.7% 15.9%;
+            --accent-foreground: 0 0% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 240 3.7% 15.9%;
+            --input: 240 3.7% 15.9%;
+            --ring: 240 4.9% 83.9%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: hsl(var(--muted));
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: hsl(var(--muted-foreground));
+        }
+
+        .animate-in {
+            animation: animateIn 0.3s ease-in-out;
+        }
+        @keyframes animateIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // --- DATA ---
+        const VERSIONS = [
+            {
+                id: 'vs-2026',
+                name: 'Visual Studio 2026',
+                tag: 'Preview / v18',
+                description: 'Phiên bản v18 mới nhất (Preview), mang đến những công nghệ tiên phong cho tương lai.',
+                editions: [
+                    { id: '2026-com', name: 'Community 2026', type: 'Miễn phí', price: 0, link: 'https://aka.ms/vs/18/Stable/vs_community.exe' },
+                    { id: '2026-pro', name: 'Professional 2026', type: 'Trả phí', price: 499, link: 'https://aka.ms/vs/18/Stable/vs_professional.exe' },
+                    { id: '2026-ent', name: 'Enterprise 2026', type: 'Doanh nghiệp', price: 2999, link: 'https://aka.ms/vs/18/Stable/vs_enterprise.exe' },
+                ]
+            },
+            {
+                id: 'vs-2022',
+                name: 'Visual Studio 2022',
+                tag: 'Ổn định / v17',
+                description: 'IDE 64-bit đầu tiên, hỗ trợ .NET 6+, C++20 và Azure tốt nhất.',
+                editions: [
+                    { id: '2022-com', name: 'Community 2022', type: 'Miễn phí', price: 0, link: 'https://aka.ms/vs/17/release/vs_community.exe' },
+                    { id: '2022-pro', name: 'Professional 2022', type: 'Trả phí', price: 499, link: 'https://aka.ms/vs/17/release/vs_professional.exe' },
+                    { id: '2022-ent', name: 'Enterprise 2022', type: 'Doanh nghiệp', price: 2999, link: 'https://aka.ms/vs/17/release/vs_enterprise.exe' },
+                ]
+            },
+            {
+                id: 'vs-code',
+                name: 'Visual Studio Code',
+                tag: 'Editor',
+                description: 'Code editor nhẹ, đa nền tảng, hỗ trợ hàng nghìn extension.',
+                editions: [
+                    { id: 'vsc-win', name: 'Windows x64', type: 'Stable', price: 0, link: 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user' },
+                    { id: 'vsc-mac', name: 'macOS Universal', type: 'Stable', price: 0, link: 'https://code.visualstudio.com/sha/download?build=stable&os=darwin-universal' },
+                    { id: 'vsc-linux', name: 'Linux (.deb)', type: 'Stable', price: 0, link: 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' },
+                ]
+            }
+        ];
+
+        // --- SHADCN UI COMPONENTS (Recreated with Tailwind) ---
+        
+        const Button = ({ children, className = "", variant = "default", size = "default", ...props }) => {
+            const baseStyles = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+            
+            const variants = {
+                default: "bg-primary text-primary-foreground hover:bg-primary/90",
+                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+                outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                ghost: "hover:bg-accent hover:text-accent-foreground",
+                link: "text-primary underline-offset-4 hover:underline",
+            };
+            
+            const sizes = {
+                default: "h-10 px-4 py-2",
+                sm: "h-9 rounded-md px-3",
+                lg: "h-11 rounded-md px-8",
+                icon: "h-10 w-10",
+            };
+
+            return (
+                <button className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`} {...props}>
+                    {children}
+                </button>
+            );
+        };
+
+        const Card = ({ className, children }) => (
+            <div className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}>
+                {children}
+            </div>
+        );
+
+        const CardHeader = ({ className, children }) => (
+            <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>{children}</div>
+        );
+
+        const CardTitle = ({ className, children }) => (
+            <h3 className={`text-2xl font-semibold leading-none tracking-tight ${className}`}>{children}</h3>
+        );
+
+        const CardDescription = ({ className, children }) => (
+            <p className={`text-sm text-muted-foreground ${className}`}>{children}</p>
+        );
+
+        const CardContent = ({ className, children }) => (
+            <div className={`p-6 pt-0 ${className}`}>{children}</div>
+        );
+
+        const CardFooter = ({ className, children }) => (
+            <div className={`flex items-center p-6 pt-0 ${className}`}>{children}</div>
+        );
+
+        const Badge = ({ children, className = "", variant = "default" }) => {
+            const baseStyles = "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
+            const variants = {
+                default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+                secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                outline: "text-foreground",
+            };
+            return <div className={`${baseStyles} ${variants[variant]} ${className}`}>{children}</div>
+        };
+
+        const Input = ({ className, ...props }) => (
+            <input
+                className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+                {...props}
+            />
+        );
+
+        const Label = ({ className, children, ...props }) => (
+            <label className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${className}`} {...props}>
+                {children}
+            </label>
+        );
+
+        const Separator = ({ className }) => (
+            <div className={`shrink-0 bg-border h-[1px] w-full ${className}`} />
+        );
+
+        // --- ICONS (Using Lucide React from CDN global) ---
+        // Note: Lucide icons are injected into window.lucide via the script tag, 
+        // but for React usage we need to use `data-lucide` or create wrapper components.
+        // For simplicity in this CDN setup, we will create simple SVG wrappers or use the lucide.createIcons() effect.
+        // However, a better way in pure React-in-HTML is to define the icons manually or use a library that supports it.
+        // Let's use simple SVG implementation for the critical icons to guarantee they render without complex effect hooks.
+        
+        const IconDownload = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>;
+        const IconCheck = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 6 9 17 4 12"/></svg>;
+        const IconCode = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>;
+        const IconCreditCard = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>;
+        const IconArrowLeft = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>;
+        const IconHardDrive = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/></svg>;
+        const IconFileCode = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg>;
+        const IconCopy = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>;
+        const IconShieldCheck = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>;
+
+        // --- MAIN APP ---
+        function App() {
+            const [currentStep, setCurrentStep] = useState('selection');
+            const [selectedMainVersion, setSelectedMainVersion] = useState(VERSIONS[0]);
+            const [selectedEdition, setSelectedEdition] = useState(VERSIONS[0].editions[0]);
+            const [isProcessing, setIsProcessing] = useState(false);
+            
+            // Payment Form
+            const [cardName, setCardName] = useState('');
+            const [cardNumber, setCardNumber] = useState('');
+            const [expiry, setExpiry] = useState('');
+            const [cvc, setCvc] = useState('');
+
+            const handleVersionChange = (version) => {
+                setSelectedMainVersion(version);
+                setSelectedEdition(version.editions[0]);
+            };
+
+            const handleProceedToPayment = () => {
+                if (selectedEdition.price === 0) {
+                    setCurrentStep('result');
+                } else {
+                    setCurrentStep('payment');
+                }
+            };
+
+            const handlePaymentSubmit = (e) => {
+                e.preventDefault();
+                setIsProcessing(true);
+                setTimeout(() => {
+                    setIsProcessing(false);
+                    setCurrentStep('result');
+                }, 2000);
+            };
+
+            const handleFinalDownload = () => {
+                window.location.href = selectedEdition.link;
+            };
+
+            const handleCopyLink = () => {
+                navigator.clipboard.writeText(selectedEdition.link);
+                alert("Đã sao chép liên kết!");
+            };
+
+            const goBack = () => {
+                setCurrentStep('selection');
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    {/* Header */}
+                    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                        <div className="container flex h-14 items-center px-4 max-w-5xl mx-auto">
+                            <div className="flex items-center gap-2 font-bold text-xl cursor-pointer" onClick={goBack}>
+                                <div className="h-8 w-8 rounded bg-primary flex items-center justify-center">
+                                    <IconCode className="text-primary-foreground h-5 w-5" />
+                                </div>
+                                <span className="hidden sm:inline-block">Visual Studio Hub</span>
+                            </div>
+                            <div className="ml-auto flex items-center space-x-2 text-sm font-medium text-muted-foreground">
+                                <span className={currentStep === 'selection' ? 'text-foreground' : ''}>1. Chọn</span>
+                                <span className="text-muted-foreground/30">/</span>
+                                <span className={currentStep === 'payment' ? 'text-foreground' : ''}>2. Thanh toán</span>
+                                <span className="text-muted-foreground/30">/</span>
+                                <span className={currentStep === 'result' ? 'text-foreground' : ''}>3. Tải</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 container max-w-5xl mx-auto py-10 px-4">
+                        
+                        {/* STEP 1: SELECTION */}
+                        {currentStep === 'selection' && (
+                            <div className="animate-in space-y-8">
+                                <div className="text-center space-y-2">
+                                    <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Công cụ lập trình đỉnh cao</h1>
+                                    <p className="text-muted-foreground text-lg max-w-[700px] mx-auto">
+                                        Chọn phiên bản Visual Studio phù hợp với nhu cầu phát triển của bạn.
+                                    </p>
+                                </div>
+
+                                <div className="grid md:grid-cols-12 gap-6 items-start">
+                                    {/* Sidebar: Version List */}
+                                    <div className="md:col-span-4 space-y-2">
+                                        <h3 className="mb-4 text-sm font-medium text-muted-foreground uppercase tracking-wide">Phiên bản</h3>
+                                        {VERSIONS.map((v) => (
+                                            <button
+                                                key={v.id}
+                                                onClick={() => handleVersionChange(v)}
+                                                className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-all hover:bg-accent group ${
+                                                    selectedMainVersion.id === v.id ? 'bg-accent ring-1 ring-border shadow-sm' : 'transparent'
+                                                }`}
+                                            >
+                                                <div className="space-y-1">
+                                                    <span className="font-medium block">{v.name}</span>
+                                                    <span className="text-xs text-muted-foreground">{v.tag}</span>
+                                                </div>
+                                                {selectedMainVersion.id === v.id && (
+                                                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* Main Content: Details */}
+                                    <Card className="md:col-span-8 border-border/60 bg-card/50 backdrop-blur-sm">
+                                        <CardHeader>
+                                            <div className="flex items-center justify-between">
+                                                <div className="space-y-1">
+                                                    <Badge variant="secondary" className="mb-2">{selectedMainVersion.tag}</Badge>
+                                                    <CardTitle>{selectedMainVersion.name}</CardTitle>
+                                                </div>
+                                            </div>
+                                            <CardDescription className="text-base mt-2">
+                                                {selectedMainVersion.description}
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="space-y-4">
+                                                <Label>Chọn gói dịch vụ (Edition)</Label>
+                                                <div className="grid gap-3">
+                                                    {selectedMainVersion.editions.map((edition) => (
+                                                        <div
+                                                            key={edition.id}
+                                                            onClick={() => setSelectedEdition(edition)}
+                                                            className={`relative flex cursor-pointer items-start gap-4 rounded-lg border p-4 shadow-sm transition-all hover:border-primary/50 ${
+                                                                selectedEdition.id === edition.id ? 'border-primary bg-primary/5' : 'border-border bg-card'
+                                                            }`}
+                                                        >
+                                                            <div className="flex-1 space-y-1">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="font-medium leading-none">{edition.name}</span>
+                                                                    <span className={`font-semibold ${edition.price === 0 ? 'text-green-500' : ''}`}>
+                                                                        {edition.price === 0 ? 'Miễn phí' : `$${edition.price}`}
+                                                                    </span>
+                                                                </div>
+                                                                <p className="text-sm text-muted-foreground">{edition.type}</p>
+                                                            </div>
+                                                            {selectedEdition.id === edition.id && (
+                                                                <IconCheck className="h-4 w-4 text-primary absolute top-4 right-4" />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                        <CardFooter className="flex flex-col gap-4 border-t bg-muted/20 p-6">
+                                            <div className="flex w-full items-center justify-between">
+                                                <span className="text-sm font-medium text-muted-foreground">Tổng thanh toán</span>
+                                                <span className="text-2xl font-bold">{selectedEdition.price === 0 ? '0 ₫' : `$${selectedEdition.price}`}</span>
+                                            </div>
+                                            <Button size="lg" className="w-full text-base" onClick={handleProceedToPayment}>
+                                                {selectedEdition.price === 0 ? 'Lấy Link Download' : 'Mua Ngay'}
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 2: PAYMENT */}
+                        {currentStep === 'payment' && (
+                            <div className="animate-in max-w-md mx-auto">
+                                <Button variant="ghost" className="mb-6 pl-0 hover:bg-transparent hover:text-primary" onClick={goBack}>
+                                    <IconArrowLeft className="mr-2 h-4 w-4" /> Quay lại
+                                </Button>
+                                
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Thanh toán an toàn</CardTitle>
+                                        <CardDescription>Nhập thông tin thẻ để hoàn tất đơn hàng.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <div className="rounded-md bg-muted p-4 flex justify-between items-center mb-4">
+                                            <div>
+                                                <p className="text-sm font-medium">{selectedEdition.name}</p>
+                                                <p className="text-xs text-muted-foreground">License trọn đời</p>
+                                            </div>
+                                            <p className="text-lg font-bold">${selectedEdition.price}</p>
+                                        </div>
+
+                                        <form onSubmit={handlePaymentSubmit} className="space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="name">Tên chủ thẻ</Label>
+                                                <Input id="name" placeholder="NGUYEN VAN A" required value={cardName} onChange={e => setCardName(e.target.value)} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="number">Số thẻ</Label>
+                                                <div className="relative">
+                                                    <Input id="number" placeholder="0000 0000 0000 0000" className="pl-10" required value={cardNumber} onChange={e => setCardNumber(e.target.value)} />
+                                                    <IconCreditCard className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="expiry">Hết hạn</Label>
+                                                    <Input id="expiry" placeholder="MM/YY" required value={expiry} onChange={e => setExpiry(e.target.value)} />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="cvc">CVC</Label>
+                                                    <Input id="cvc" placeholder="123" type="password" required value={cvc} onChange={e => setCvc(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <Button className="w-full mt-4" size="lg" type="submit" disabled={isProcessing}>
+                                                {isProcessing ? "Đang xử lý..." : `Thanh toán $${selectedEdition.price}`}
+                                            </Button>
+                                        </form>
+                                    </CardContent>
+                                    <CardFooter className="justify-center border-t p-4">
+                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                            <IconShieldCheck className="h-3 w-3" />
+                                            Bảo mật SSL 256-bit
+                                        </div>
+                                    </CardFooter>
+                                </Card>
+                            </div>
+                        )}
+
+                        {/* STEP 3: RESULT */}
+                        {currentStep === 'result' && (
+                            <div className="animate-in max-w-2xl mx-auto text-center py-10">
+                                <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10 ring-1 ring-green-500/50">
+                                    <IconCheck className="h-10 w-10 text-green-500" />
+                                </div>
+                                <h2 className="text-3xl font-bold tracking-tight mb-2">Đã sẵn sàng tải xuống!</h2>
+                                <p className="text-muted-foreground mb-10">
+                                    Cảm ơn bạn đã lựa chọn <strong>{selectedEdition.name}</strong>.
+                                </p>
+
+                                {/* Image Download Button */}
+                                <div 
+                                    className="group relative w-full max-w-lg mx-auto cursor-pointer mb-8"
+                                    onClick={handleFinalDownload}
+                                >
+                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-blue-600 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-500"></div>
+                                    <div className="relative flex items-center bg-card border border-border rounded-xl p-4 hover:bg-accent/50 transition-colors">
+                                        <div className="h-16 w-16 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shrink-0 shadow-inner">
+                                            {selectedMainVersion.id === 'vs-code' ? 
+                                                <IconFileCode className="h-8 w-8 text-white" /> : 
+                                                <IconHardDrive className="h-8 w-8 text-white" />
+                                            }
+                                        </div>
+                                        <div className="ml-4 flex-1 text-left">
+                                            <div className="text-xs font-bold text-primary uppercase tracking-wider mb-0.5">Official Installer</div>
+                                            <h3 className="text-lg font-bold text-foreground">{selectedEdition.name}</h3>
+                                            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                                                <span className="bg-muted px-1.5 py-0.5 rounded text-foreground">.exe</span>
+                                                <span>64-bit</span>
+                                            </div>
+                                        </div>
+                                        <div className="mr-2 h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                                            <IconDownload className="h-5 w-5" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-center gap-2 mb-8">
+                                    <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm text-muted-foreground">
+                                        {selectedEdition.link}
+                                    </code>
+                                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleCopyLink}>
+                                        <IconCopy className="h-4 w-4" />
+                                    </Button>
+                                </div>
+
+                                <Button variant="link" onClick={goBack}>Quay lại trang chủ</Button>
+                            </div>
+                        )}
+                    </main>
+
+                    <footer className="border-t py-6 md:py-0">
+                        <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row max-w-5xl mx-auto px-4">
+                            <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+                                © 2025 Visual Studio Hub. All rights reserved.
+                            </p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
