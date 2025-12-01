@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NQA TECH SOFT</title>
+    <title>NQA TECH SOFT </title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,7 +14,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind Config with CSS Variables -->
+    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -25,14 +25,20 @@
                         background: "rgba(var(--background), <alpha-value>)",
                         foreground: "rgba(var(--foreground), <alpha-value>)",
                         card: "rgba(var(--card), <alpha-value>)",
-                        "card-foreground": "rgba(var(--card-foreground), <alpha-value>)",
                         primary: "rgba(var(--primary), <alpha-value>)",
-                        "primary-foreground": "rgba(var(--primary-foreground), <alpha-value>)",
                         muted: "rgba(var(--muted), <alpha-value>)",
-                        "muted-foreground": "rgba(var(--muted-foreground), <alpha-value>)",
                         border: "rgba(var(--border), <alpha-value>)",
-                        input: "rgba(var(--input), <alpha-value>)",
-                        accent: "rgba(var(--accent), <alpha-value>)",
+                        shopee: "#ee4d2d", 
+                        momo: "#a50064",
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
                     }
                 }
             }
@@ -40,45 +46,22 @@
     </script>
 
     <style>
-        /* CSS Variables for Dynamic Theming */
         :root {
-            /* Light Mode - Slate friendly palette */
-            --background: 248, 250, 252; /* Slate 50 */
-            --foreground: 15, 23, 42;    /* Slate 900 */
-            
-            --card: 255, 255, 255;       /* White */
-            --card-foreground: 15, 23, 42;
-            
-            --primary: 79, 70, 229;      /* Indigo 600 - Friendly Blue/Purple */
-            --primary-foreground: 255, 255, 255;
-            
-            --muted: 241, 245, 249;      /* Slate 100 */
-            --muted-foreground: 100, 116, 139; /* Slate 500 */
-            
-            --border: 226, 232, 240;     /* Slate 200 */
-            --input: 226, 232, 240;
-            
-            --accent: 241, 245, 249;     /* Slate 100 (Hover bg) */
+            --background: 248, 250, 252;
+            --foreground: 15, 23, 42;
+            --card: 255, 255, 255;
+            --primary: 79, 70, 229;
+            --muted: 241, 245, 249;
+            --border: 226, 232, 240;
         }
 
         .dark {
-            /* Dark Mode - Deep Slate (Eye comfort) */
-            --background: 2, 6, 23;      /* Slate 950 */
-            --foreground: 248, 250, 252; /* Slate 50 */
-            
-            --card: 15, 23, 42;          /* Slate 900 */
-            --card-foreground: 248, 250, 252;
-            
-            --primary: 99, 102, 241;     /* Indigo 500 - Lighter for dark bg */
-            --primary-foreground: 255, 255, 255;
-            
-            --muted: 30, 41, 59;         /* Slate 800 */
-            --muted-foreground: 148, 163, 184; /* Slate 400 */
-            
-            --border: 30, 41, 59;        /* Slate 800 */
-            --input: 30, 41, 59;
-            
-            --accent: 30, 41, 59;        /* Slate 800 */
+            --background: 2, 6, 23;
+            --foreground: 248, 250, 252;
+            --card: 15, 23, 42;
+            --primary: 99, 102, 241;
+            --muted: 30, 41, 59;
+            --border: 30, 41, 59;
         }
 
         body {
@@ -87,39 +70,48 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Smooth Step Transitions */
+        /* Snow Animation */
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            overflow: hidden;
+            transition: opacity 0.5s ease; /* Fade in effect */
+            opacity: 0; /* Hidden by default */
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: rgba(var(--foreground), 0.3);
+            font-size: 1em;
+            font-family: Arial;
+            text-shadow: 0 0 1px #000;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh); }
+        }
+
         .step-hidden { display: none; }
         .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Active States Styling */
         .active-version {
-            background-color: rgba(var(--primary), 0.08);
-            border-color: rgba(var(--primary), 0.5);
-        }
-        .active-version .indicator { background-color: rgba(var(--primary), 1); }
-        .active-version h3 { color: rgba(var(--primary), 1); }
-
-        .active-edition {
-            border-color: rgba(var(--primary), 1);
-            background-color: rgba(var(--primary), 0.05);
-            box-shadow: 0 4px 6px -1px rgba(var(--primary), 0.1);
-        }
-        
-        /* Glassmorphism utils */
-        .glass-panel {
-            background: rgba(var(--card), 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        
-        /* Mobile touch optimization */
-        button, a {
-            touch-action: manipulation;
+            background-color: rgba(var(--primary), 0.1);
+            border-color: rgba(var(--primary), 0.6);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-primary/30 selection:text-primary-foreground">
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-primary/30 selection:text-white">
+
+    <!-- Snow Container (Controlled by JS scroll) -->
+    <div id="snow-container" class="snow-container"></div>
 
     <!-- Header -->
     <header class="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md transition-colors duration-300">
@@ -128,291 +120,233 @@
                 <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center shadow-lg shadow-primary/20">
                     <i data-lucide="code-2" class="text-white h-6 w-6"></i>
                 </div>
-                <span class="hidden sm:inline-block tracking-tight text-foreground">Visual Studio <span class="text-muted-foreground font-normal">Hub</span></span>
+                <span class="hidden sm:inline-block tracking-tight">Visual Studio <span class="text-gray-400 font-normal">Hub</span></span>
             </div>
             
             <div class="flex items-center gap-4">
-                <!-- Theme Toggle Button -->
-                <button onclick="toggleTheme()" class="h-9 w-9 rounded-lg border border-border flex items-center justify-center hover:bg-accent hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20" title="Chuyển chế độ Sáng/Tối">
+                <button onclick="toggleTheme()" class="h-9 w-9 rounded-lg border border-border flex items-center justify-center hover:bg-muted hover:text-primary transition-colors">
                     <i data-lucide="sun" class="h-5 w-5 block dark:hidden"></i>
                     <i data-lucide="moon" class="h-5 w-5 hidden dark:block"></i>
                 </button>
-
-                <!-- Step Indicator (Hidden on very small mobile) -->
-                <div class="hidden md:flex items-center space-x-2 text-sm font-medium text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full border border-border/50" id="nav-steps">
-                    <span id="nav-step-1" class="text-foreground">1. Chọn</span>
-                    <span class="text-muted-foreground/30">/</span>
-                    <span id="nav-step-2">2. Thanh toán</span>
-                    <span class="text-muted-foreground/30">/</span>
-                    <span id="nav-step-3">3. Tải xuống</span>
-                </div>
             </div>
         </div>
     </header>
 
     <main class="flex-1 w-full relative">
-        <!-- Background decorative blobs -->
+        <!-- Background Gradient -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
             <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px]"></div>
-            <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[100px]"></div>
         </div>
         
         <!-- STEP 1: SELECTION -->
         <div id="step-selection" class="fade-in container mx-auto max-w-7xl px-4 py-12">
             
             <!-- Hero -->
-            <div class="text-center space-y-6 mb-16">
-                <span class="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary shadow-sm">
-                    ✨ Phiên bản 2026 Preview đã có mặt
+            <!-- <div class="text-center space-y-6 mb-16">
+                <span class="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary shadow-sm animate-float">
+                    🚀 Cập nhật link tải Community mới nhất
                 </span>
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
-                    Công cụ lập trình <br class="hidden md:block" />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">không giới hạn</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                    Tải Visual Studio <br class="hidden md:block" />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">Chính Hãng Microsoft</span>
                 </h1>
-                <p class="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                    Visual Studio, VS Code và SQL Server - Bộ công cụ hoàn chỉnh được tin dùng bởi hàng triệu nhà phát triển trên toàn thế giới.
+                <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                    Tổng hợp link tải trực tiếp (Direct Link) các phiên bản 2026, 2022, 2019, 2017. 
+                    Ưu tiên bản Community miễn phí cho học tập và nghiên cứu.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-                    <button onclick="scrollToGrid()" class="h-12 px-8 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-95 flex items-center justify-center gap-2">
-                        <i data-lucide="download"></i> Tải xuống ngay
-                    </button>
-                    <button class="h-12 px-8 rounded-xl bg-card border border-border text-foreground font-semibold hover:bg-accent hover:border-primary/30 transition-all active:scale-95">
-                        Tìm hiểu thêm
-                    </button>
+            </div> -->
+
+            <!-- $$$ AFFILIATE SECTION: TECH GEAR $$$ -->
+            <div class="mb-20">
+                <div class="flex items-center gap-2 mb-6 justify-center md:justify-start">
+                    <div class="h-8 w-1 bg-shopee rounded-full"></div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Góc Công Nghệ 🔥</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- Product 1 -->
+                    <a href="https://shopee.vn" target="_blank" class="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-shopee/10 transition-all hover:-translate-y-1">
+                        <div class="h-40 bg-gray-100 dark:bg-gray-800 flex items-center justify-center relative">
+                            <i data-lucide="keyboard" class="h-16 w-16 text-gray-400 group-hover:text-shopee transition-colors"></i>
+                            <span class="absolute top-2 right-2 bg-shopee text-white text-[10px] font-bold px-2 py-0.5 rounded">-25%</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-sm mb-1 truncate">Bàn phím cơ Keychron K2 Pro</h3>
+                            <div class="flex justify-between items-center">
+                                <span class="text-shopee font-bold">1.850.000₫</span>
+                                <span class="text-[10px] text-gray-500 line-through">2.400.000₫</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Product 2 -->
+                    <a href="https://shopee.vn" target="_blank" class="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-shopee/10 transition-all hover:-translate-y-1">
+                        <div class="h-40 bg-gray-100 dark:bg-gray-800 flex items-center justify-center relative">
+                            <i data-lucide="mouse" class="h-16 w-16 text-gray-400 group-hover:text-shopee transition-colors"></i>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-sm mb-1 truncate">Chuột Logitech MX Master 3S</h3>
+                            <div class="flex justify-between items-center">
+                                <span class="text-shopee font-bold">2.100.000₫</span>
+                                <i data-lucide="shopping-cart" class="h-4 w-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Product 3 -->
+                    <a href="https://shopee.vn" target="_blank" class="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-shopee/10 transition-all hover:-translate-y-1">
+                        <div class="h-40 bg-gray-100 dark:bg-gray-800 flex items-center justify-center relative">
+                            <i data-lucide="monitor" class="h-16 w-16 text-gray-400 group-hover:text-shopee transition-colors"></i>
+                            <span class="absolute top-2 right-2 bg-shopee text-white text-[10px] font-bold px-2 py-0.5 rounded">Hot</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-sm mb-1 truncate">Màn hình Dell UltraSharp U2422H</h3>
+                            <div class="flex justify-between items-center">
+                                <span class="text-shopee font-bold">5.690.000₫</span>
+                                <i data-lucide="shopping-cart" class="h-4 w-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Product 4 -->
+                    <a href="https://shopee.vn" target="_blank" class="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-shopee/10 transition-all hover:-translate-y-1">
+                        <div class="h-40 bg-gray-100 dark:bg-gray-800 flex items-center justify-center relative">
+                            <i data-lucide="headphones" class="h-16 w-16 text-gray-400 group-hover:text-shopee transition-colors"></i>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-sm mb-1 truncate">Tai nghe Sony WH-1000XM5</h3>
+                            <div class="flex justify-between items-center">
+                                <span class="text-shopee font-bold">6.490.000₫</span>
+                                <i data-lucide="shopping-cart" class="h-4 w-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="https://shopee.vn" target="_blank" class="text-xs text-muted-foreground hover:text-shopee hover:underline transition-colors">Xem thêm thiết bị công nghệ trên Shopee &rarr;</a>
                 </div>
             </div>
+            <!-- $$$ END AFFILIATE $$$ -->
 
-            <!-- Features Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-                <div class="group rounded-2xl border border-border bg-card p-6 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4 text-primary group-hover:scale-110 transition-transform">
-                        <i data-lucide="zap"></i>
-                    </div>
-                    <h3 class="text-lg font-bold mb-2 text-foreground">Hiệu suất cao</h3>
-                    <p class="text-muted-foreground text-sm leading-relaxed">Kiến trúc 64-bit giúp xử lý dự án lớn mượt mà, nhanh chóng hơn bao giờ hết.</p>
-                </div>
-                <div class="group rounded-2xl border border-border bg-card p-6 hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
-                        <i data-lucide="cloud"></i>
-                    </div>
-                    <h3 class="text-lg font-bold mb-2 text-foreground">Tích hợp Azure</h3>
-                    <p class="text-muted-foreground text-sm leading-relaxed">Triển khai lên đám mây chỉ với vài cú click chuột trực tiếp từ IDE của bạn.</p>
-                </div>
-                <div class="group rounded-2xl border border-border bg-card p-6 hover:border-teal-500/30 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-teal-500/10 flex items-center justify-center mb-4 text-teal-600 group-hover:scale-110 transition-transform">
-                        <i data-lucide="database"></i>
-                    </div>
-                    <h3 class="text-lg font-bold mb-2 text-foreground">Dữ liệu thông minh</h3>
-                    <p class="text-muted-foreground text-sm leading-relaxed">SQL Server 2022 tích hợp sẵn các tính năng phân tích dữ liệu AI tiên tiến.</p>
-                </div>
-            </div>
-
-            <!-- Selection Area -->
+            <!-- Selection Grid -->
             <div id="selection-grid" class="scroll-mt-24">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="h-8 w-1 bg-primary rounded-full"></div>
-                    <h2 class="text-2xl font-bold text-foreground">Chọn phiên bản</h2>
+                    <h2 class="text-2xl font-bold">Tải xuống Visual Studio</h2>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                     
                     <!-- Sidebar List -->
-                    <div class="md:col-span-4 space-y-3" id="version-list">
-                        <!-- Items injected by JS -->
-                    </div>
+                    <div class="md:col-span-4 space-y-3" id="version-list"></div>
 
                     <!-- Details Card -->
                     <div class="md:col-span-8 rounded-2xl border border-border bg-card/80 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-                        <!-- Top Accent Line -->
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-blue-500"></div>
                         
                         <div class="p-6 md:p-8 space-y-8">
-                            <!-- Header -->
                             <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <span id="detail-tag" class="inline-flex items-center rounded-lg border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-bold text-primary">Tag</span>
-                                </div>
-                                <h2 id="detail-name" class="text-3xl font-bold tracking-tight text-foreground mb-3">Name</h2>
-                                <p id="detail-desc" class="text-muted-foreground text-lg leading-relaxed">Description</p>
+                                <span id="detail-tag" class="inline-flex items-center rounded-lg border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-bold text-primary mb-4">Tag</span>
+                                <h2 id="detail-name" class="text-3xl font-bold tracking-tight mb-3">Name</h2>
+                                <p id="detail-desc" class="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">Description</p>
                             </div>
                             
                             <hr class="border-border">
 
-                            <!-- Editions -->
                             <div class="space-y-4">
-                                <label class="text-sm font-bold text-foreground uppercase tracking-wider opacity-70">Chọn gói dịch vụ</label>
-                                <div class="grid gap-4" id="edition-list">
-                                    <!-- Editions injected by JS -->
-                                </div>
+                                <label class="text-sm font-bold uppercase tracking-wider opacity-70">Chọn phiên bản (Edition)</label>
+                                <div class="grid gap-4" id="edition-list"></div>
                             </div>
 
-                            <!-- Footer -->
                             <div class="pt-6 mt-6 bg-muted/30 -mx-6 -mb-6 md:-mx-8 md:-mb-8 px-6 pb-6 md:px-8 md:pb-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-border">
                                 <div>
-                                    <span class="text-sm text-muted-foreground font-medium block">Tổng cộng</span>
-                                    <span id="total-price" class="text-3xl font-bold text-foreground">0 ₫</span>
+                                    <span class="text-sm text-gray-500 font-medium block">Trạng thái</span>
+                                    <span class="text-2xl font-bold text-green-500">Sẵn sàng</span>
                                 </div>
                                 <button onclick="proceedToPayment()" id="btn-action" class="w-full sm:w-auto px-8 h-14 rounded-xl bg-primary text-white text-lg font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center justify-center gap-2">
-                                    Lấy Link Download <i data-lucide="arrow-right" class="h-5 w-5"></i>
+                                    <i data-lucide="download" class="h-5 w-5"></i> Lấy Link Tải
                                 </button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <!-- STEP 2: PAYMENT -->
+        <!-- STEP 2: PAYMENT (Simulated for Paid / Direct for Free) -->
         <div id="step-payment" class="step-hidden fade-in container mx-auto max-w-lg px-4 py-20">
-            <button onclick="goToStep('selection')" class="flex items-center text-muted-foreground hover:text-foreground mb-8 transition-colors group font-medium">
-                <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center mr-2 group-hover:bg-accent transition-colors">
-                    <i data-lucide="arrow-left" class="h-4 w-4 group-hover:-translate-x-0.5 transition-transform"></i>
-                </div>
-                Quay lại
+            <button onclick="goToStep('selection')" class="flex items-center text-gray-500 hover:text-white mb-8">
+                <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i> Quay lại
             </button>
-
-            <div class="rounded-2xl border border-border bg-card shadow-2xl overflow-hidden relative">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-indigo-400"></div>
-                
-                <div class="p-8 space-y-8">
-                    <div class="text-center space-y-2">
-                        <div class="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="credit-card" class="h-7 w-7"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-foreground">Thanh toán an toàn</h3>
-                        <p class="text-muted-foreground">Nhập thông tin thẻ để hoàn tất đơn hàng.</p>
-                    </div>
-
-                    <!-- Order Summary -->
-                    <div class="rounded-xl bg-muted/50 border border-border p-5 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-foreground" id="payment-item-name">Product</p>
-                            <p class="text-xs text-muted-foreground mt-0.5">License trọn đời</p>
-                        </div>
-                        <p class="text-xl font-bold text-primary" id="payment-item-price">$0</p>
-                    </div>
-
-                    <!-- Form -->
-                    <form onsubmit="handlePaymentSubmit(event)" class="space-y-5">
-                        <div class="space-y-2">
-                            <label class="text-xs font-bold text-foreground uppercase tracking-wider">Tên chủ thẻ</label>
-                            <input required type="text" placeholder="NGUYEN VAN A" class="flex h-12 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-xs font-bold text-foreground uppercase tracking-wider">Số thẻ</label>
-                            <div class="relative">
-                                <input required type="text" placeholder="0000 0000 0000 0000" class="flex h-12 w-full rounded-lg border border-input bg-background px-4 py-2 pl-11 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono">
-                                <i data-lucide="credit-card" class="absolute left-3.5 top-3.5 h-5 w-5 text-muted-foreground"></i>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold text-foreground uppercase tracking-wider">Hết hạn</label>
-                                <input required type="text" placeholder="MM/YY" class="flex h-12 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-center">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold text-foreground uppercase tracking-wider">CVC</label>
-                                <input required type="password" placeholder="123" class="flex h-12 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-center">
-                            </div>
-                        </div>
-                        <button type="submit" id="btn-pay" class="w-full h-14 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 mt-4 flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all active:scale-95">
-                            Thanh toán ngay
-                        </button>
-                    </form>
+            <div class="rounded-2xl border border-border bg-card shadow-2xl p-8 text-center">
+                <h3 class="text-2xl font-bold mb-4">Xác nhận tải xuống</h3>
+                <p class="text-gray-500 mb-6">Bạn đang tải phiên bản <strong id="pay-name" class="text-primary"></strong>.</p>
+                <div class="p-4 bg-muted/50 rounded-lg mb-6 text-sm text-gray-400">
+                    Đây là liên kết trực tiếp từ máy chủ Microsoft (aka.ms).
                 </div>
-                <div class="p-4 bg-muted/50 border-t border-border flex justify-center text-xs text-muted-foreground items-center gap-2 font-medium">
-                    <i data-lucide="lock" class="h-3 w-3 text-green-500"></i> Mã hóa bảo mật SSL 256-bit
-                </div>
+                <button onclick="handlePaymentSubmit(event)" id="btn-pay" class="w-full h-12 rounded-xl bg-primary text-white font-bold">Tiến hành tải</button>
             </div>
         </div>
 
         <!-- STEP 3: RESULT -->
         <div id="step-result" class="step-hidden fade-in container mx-auto max-w-2xl px-4 py-20 text-center">
-            <div class="inline-flex h-28 w-28 items-center justify-center rounded-full bg-green-500/10 ring-8 ring-green-500/5 mb-8 animate-pulse-slow">
-                <i data-lucide="check-circle-2" class="h-14 w-14 text-green-500"></i>
+             <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-green-500/10 ring-8 ring-green-500/5 mb-8 animate-pulse">
+                <i data-lucide="check-circle-2" class="h-12 w-12 text-green-500"></i>
             </div>
-            <h2 class="text-4xl font-bold mb-4 text-foreground">Sẵn sàng tải xuống!</h2>
-            <p class="text-muted-foreground text-lg mb-12 max-w-md mx-auto leading-relaxed">
-                Cảm ơn bạn đã lựa chọn <strong id="result-name" class="text-primary">Visual Studio</strong>. Nhấn vào thẻ bên dưới để bắt đầu.
-            </p>
+             <h2 class="text-3xl font-bold mb-4">Đã mở liên kết!</h2>
+             <p class="text-gray-500 mb-8">Trình duyệt của bạn sẽ tự động tải file <strong>.exe</strong> về máy.</p>
+             
+             <div class="bg-card border border-border p-4 rounded-xl mb-8 flex items-center justify-between gap-4 max-w-lg mx-auto">
+                 <code id="final-link" class="text-xs text-gray-400 truncate flex-1">...</code>
+                 <button onclick="copyLink()" class="p-2 bg-muted hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"><i data-lucide="copy" class="h-4 w-4"></i></button>
+             </div>
 
-            <!-- Download Card -->
-            <div onclick="downloadFile()" class="group relative w-full max-w-lg mx-auto cursor-pointer mb-10 transform hover:scale-[1.02] transition-all duration-300">
-                <div class="absolute -inset-1 bg-gradient-to-r from-primary via-indigo-500 to-blue-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                <div class="relative flex items-center bg-card border border-border rounded-xl p-5 hover:bg-accent/50 transition-colors shadow-2xl">
-                    <div class="h-20 w-20 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shrink-0 shadow-inner text-white">
-                        <i id="result-icon" data-lucide="hard-drive" class="h-10 w-10"></i>
-                    </div>
-                    <div class="ml-6 flex-1 text-left">
-                        <div class="text-xs font-bold text-primary uppercase tracking-wider mb-1">Official Installer</div>
-                        <h3 id="result-card-name" class="text-2xl font-bold text-foreground mb-1">Product Name</h3>
-                        <div class="flex items-center gap-3 text-xs text-muted-foreground font-medium">
-                            <span class="bg-muted px-2 py-0.5 rounded text-foreground">.exe</span>
-                            <span>•</span>
-                            <span>64-bit / x86</span>
-                            <span>•</span>
-                            <span>Verified</span>
-                        </div>
-                    </div>
-                    <div class="mr-2 h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
-                        <i data-lucide="download" class="h-6 w-6"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-center gap-3 mb-12">
-                <div class="relative rounded-lg bg-muted px-4 py-2.5 text-sm text-muted-foreground border border-border flex items-center gap-2 max-w-xs overflow-hidden">
-                    <i data-lucide="link" class="h-4 w-4 shrink-0 opacity-50"></i>
-                    <span id="result-link" class="truncate font-mono">https://aka.ms/download</span>
-                </div>
-                <button onclick="copyLink()" class="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-lg border border-border bg-card hover:bg-accent hover:text-foreground transition-all focus:ring-2 focus:ring-primary/20" title="Sao chép">
-                    <i data-lucide="copy" class="h-5 w-5"></i>
-                </button>
-            </div>
-
-            <button onclick="goToStep('selection')" class="text-muted-foreground hover:text-foreground hover:underline underline-offset-4 text-sm font-medium transition-colors">
-                Quay lại trang chủ
-            </button>
+             <div class="mt-8">
+                <button onclick="goToStep('selection')" class="text-sm text-gray-500 hover:text-white underline">Quay lại trang chủ</button>
+             </div>
         </div>
 
     </main>
 
+    <!-- FOOTER DONATE -->
     <footer class="border-t border-border py-12 bg-muted/20 mt-auto">
         <div class="container mx-auto max-w-7xl px-4 text-center">
-            <div class="flex items-center justify-center gap-2 font-bold text-lg mb-4 opacity-50">
-                <i data-lucide="code-2" class="h-5 w-5"></i> Visual Studio Hub
+            
+            <!-- Support Section -->
+            <div class="max-w-md mx-auto bg-card border border-border rounded-2xl p-6 mb-10 shadow-sm relative overflow-hidden group hover:border-momo/30 transition-colors">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-momo/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                <h4 class="font-bold mb-2 flex items-center justify-center gap-2">
+                    <i data-lucide="heart" class="text-momo h-5 w-5 fill-momo animate-pulse"></i> Donate
+                </h4>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Duy trì máy chủ và phát triển cộng đồng.</p>
+                <div class="flex gap-3 justify-center">
+                    <button class="px-5 py-2.5 rounded-xl bg-[#a50064] text-white hover:bg-[#8e0056] transition-colors text-sm font-bold flex items-center gap-2 shadow-lg shadow-momo/20">
+                        <i data-lucide="qr-code" class="h-4 w-4"></i> Momo
+                    </button>
+                    <button class="px-5 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-600/20">
+                        <i data-lucide="credit-card" class="h-4 w-4"></i> Banking
+                    </button>
+                </div>
             </div>
-            <p class="text-sm text-muted-foreground">© 2025 Visual Studio Hub. All rights reserved.</p>
+
+            <p class="text-sm text-gray-500">© 2025 Visual Studio Hub. Link tải từ Microsoft.</p>
         </div>
     </footer>
 
     <!-- LOGIC SCRIPT -->
     <script>
-        // --- DATA ---
+        // --- DATA FROM USER FILE (vs_26_22_19_17_dl.txt) ---
         const VERSIONS = [
             {
                 id: 'vs-2026',
                 name: 'Visual Studio 2026',
                 tag: 'Preview / v18',
                 icon: 'code-2',
-                description: 'Phiên bản v18 mới nhất (Preview), mang đến những công nghệ tiên phong cho tương lai.',
+                description: 'Phiên bản v18 mới nhất (Preview) từ Microsoft.',
                 editions: [
-                    { id: '2026-com', name: 'Community 2026', type: 'Miễn phí', price: 0, link: 'https://aka.ms/vs/18/Stable/vs_community.exe' },
-                    { id: '2026-pro', name: 'Professional 2026', type: 'Trả phí', price: 499, link: 'https://aka.ms/vs/18/Stable/vs_professional.exe' },
-                    { id: '2026-ent', name: 'Enterprise 2026', type: 'Doanh nghiệp', price: 2999, link: 'https://aka.ms/vs/18/Stable/vs_enterprise.exe' },
-                ]
-            },
-            {
-                id: 'sql-server',
-                name: 'SQL Server 2022',
-                tag: 'Database',
-                icon: 'database',
-                description: 'Hệ quản trị cơ sở dữ liệu quan hệ mạnh mẽ, bảo mật và thông minh hàng đầu.',
-                editions: [
-                    { id: 'sql-dev', name: 'Developer Edition', type: 'Miễn phí (Dev/Test)', price: 0, link: 'https://www.microsoft.com/en-us/sql-server/sql-server-downloads' },
-                    { id: 'sql-exp', name: 'Express Edition', type: 'Miễn phí (Small App)', price: 0, link: 'https://www.microsoft.com/en-us/sql-server/sql-server-downloads' },
-                    { id: 'sql-ent', name: 'Enterprise Edition', type: 'Doanh nghiệp', price: 14000, link: 'https://www.microsoft.com/en-us/sql-server/sql-server-downloads' },
+                    { id: '2026-com', name: 'Community 2026', type: 'Miễn phí', link: 'https://aka.ms/vs/18/Stable/vs_community.exe' },
+                    { id: '2026-pro', name: 'Professional 2026', type: 'Trả phí', link: 'https://aka.ms/vs/18/Stable/vs_professional.exe' },
+                    { id: '2026-ent', name: 'Enterprise 2026', type: 'Doanh nghiệp', link: 'https://aka.ms/vs/18/Stable/vs_enterprise.exe' },
                 ]
             },
             {
@@ -420,89 +354,114 @@
                 name: 'Visual Studio 2022',
                 tag: 'Ổn định / v17',
                 icon: 'hard-drive',
-                description: 'IDE 64-bit đầu tiên, hỗ trợ .NET 6+, C++20 và Azure tốt nhất.',
+                description: 'IDE 64-bit phổ biến nhất hiện nay.',
                 editions: [
-                    { id: '2022-com', name: 'Community 2022', type: 'Miễn phí', price: 0, link: 'https://aka.ms/vs/17/release/vs_community.exe' },
-                    { id: '2022-pro', name: 'Professional 2022', type: 'Trả phí', price: 499, link: 'https://aka.ms/vs/17/release/vs_professional.exe' },
-                    { id: '2022-ent', name: 'Enterprise 2022', type: 'Doanh nghiệp', price: 2999, link: 'https://aka.ms/vs/17/release/vs_enterprise.exe' },
+                    { id: '2022-com', name: 'Community 2022', type: 'Miễn phí', link: 'https://aka.ms/vs/17/release/vs_community.exe' },
+                    { id: '2022-pro', name: 'Professional 2022', type: 'Trả phí', link: 'https://aka.ms/vs/17/release/vs_professional.exe' },
+                    { id: '2022-ent', name: 'Enterprise 2022', type: 'Doanh nghiệp', link: 'https://aka.ms/vs/17/release/vs_enterprise.exe' },
                 ]
             },
             {
-                id: 'vs-code',
-                name: 'Visual Studio Code',
-                tag: 'Editor',
-                icon: 'file-code',
-                description: 'Code editor nhẹ, đa nền tảng, hỗ trợ hàng nghìn extension.',
+                id: 'vs-2019',
+                name: 'Visual Studio 2019',
+                tag: 'Legacy / v16',
+                icon: 'archive',
+                description: 'Phiên bản ổn định cho các dự án cũ.',
                 editions: [
-                    { id: 'vsc-win', name: 'Windows x64', type: 'Stable', price: 0, link: 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user' },
-                    { id: 'vsc-mac', name: 'macOS Universal', type: 'Stable', price: 0, link: 'https://code.visualstudio.com/sha/download?build=stable&os=darwin-universal' },
-                    { id: 'vsc-linux', name: 'Linux (.deb)', type: 'Stable', price: 0, link: 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' },
+                    { id: '2019-com', name: 'Community 2019', type: 'Miễn phí', link: 'https://aka.ms/vs/16/release/vs_community.exe' },
+                    { id: '2019-pro', name: 'Professional 2019', type: 'Trả phí', link: 'https://aka.ms/vs/16/release/vs_professional.exe' },
+                    { id: '2019-ent', name: 'Enterprise 2019', type: 'Doanh nghiệp', link: 'https://aka.ms/vs/16/release/vs_enterprise.exe' },
+                ]
+            },
+            {
+                id: 'vs-2017',
+                name: 'Visual Studio 2017',
+                tag: 'Legacy / v15',
+                icon: 'archive',
+                description: 'Hỗ trợ .NET Core cũ.',
+                editions: [
+                    { id: '2017-com', name: 'Community 2017', type: 'Miễn phí', link: 'https://aka.ms/vs/15/release/vs_community.exe' },
+                    { id: '2017-pro', name: 'Professional 2017', type: 'Trả phí', link: 'https://aka.ms/vs/15/release/vs_professional.exe' },
+                    { id: '2017-ent', name: 'Enterprise 2017', type: 'Doanh nghiệp', link: 'https://aka.ms/vs/15/release/vs_enterprise.exe' },
                 ]
             }
         ];
 
-        // --- STATE & UTILS ---
         let selectedMainVersion = VERSIONS[0];
         let selectedEdition = VERSIONS[0].editions[0];
 
+        // --- THEME TOGGLE ---
         function toggleTheme() {
             const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // --- SNOWFALL LOGIC ---
+        function createSnowflakes() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflakesCount = 50; 
+
+            for (let i = 0; i < snowflakesCount; i++) {
+                const flake = document.createElement('div');
+                flake.classList.add('snowflake');
+                flake.innerHTML = '❄';
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.animationDuration = Math.random() * 3 + 2 + 's'; 
+                flake.style.opacity = Math.random();
+                flake.style.fontSize = Math.random() * 10 + 10 + 'px';
+                
+                snowContainer.appendChild(flake);
             }
         }
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        function handleScrollSnow() {
+            const snowContainer = document.getElementById('snow-container');
+            const scrollY = window.scrollY;
             
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                document.documentElement.classList.add('dark');
+            // Show snow gradually as user scrolls down
+            if (scrollY > 100) {
+                snowContainer.style.opacity = '1';
             } else {
-                document.documentElement.classList.remove('dark');
+                snowContainer.style.opacity = '0';
             }
         }
 
+        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            initTheme();
+            if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark');
+            
             renderSidebar();
             renderDetails();
             lucide.createIcons();
+            createSnowflakes();
+            
+            window.addEventListener('scroll', handleScrollSnow);
         });
 
-        // --- RENDER FUNCTIONS ---
+        // --- RENDER ---
         function renderSidebar() {
             const container = document.getElementById('version-list');
             container.innerHTML = '';
-            
             VERSIONS.forEach(v => {
                 const isActive = selectedMainVersion.id === v.id;
-                const activeClass = isActive 
-                    ? 'active-version' 
-                    : 'bg-card border-transparent hover:bg-accent/50 hover:border-border';
-                const indicator = isActive 
-                    ? `<div class="h-2 w-2 rounded-full indicator ml-auto shadow-glow"></div>` 
-                    : '';
-
+                const activeClass = isActive ? 'active-version' : 'bg-card hover:bg-accent/50 border-transparent';
+                
                 const btn = document.createElement('button');
-                btn.className = `w-full flex items-center p-4 rounded-xl text-left transition-all border ${activeClass} group`;
-                btn.onclick = () => selectVersion(v.id);
+                btn.className = `w-full flex items-center p-4 rounded-xl text-left border ${activeClass} transition-all mb-3`;
+                btn.onclick = () => { selectedMainVersion = v; selectedEdition = v.editions[0]; renderSidebar(); renderDetails(); };
                 btn.innerHTML = `
-                    <div class="mr-3 h-10 w-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground group-hover:text-foreground transition-colors ${isActive ? 'bg-primary/10 text-primary' : ''}">
+                    <div class="mr-3 h-10 w-10 rounded-lg bg-muted flex items-center justify-center ${isActive ? 'text-primary' : 'text-gray-400'}">
                         <i data-lucide="${v.icon}" class="h-5 w-5"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm block transition-colors ${isActive ? 'text-primary' : 'text-foreground'}">${v.name}</h3>
-                        <span class="text-xs text-muted-foreground">${v.tag}</span>
+                        <h3 class="font-bold text-sm ${isActive ? 'text-primary' : ''}">${v.name}</h3>
+                        <span class="text-xs text-gray-500">${v.tag}</span>
                     </div>
-                    ${indicator}
                 `;
                 container.appendChild(btn);
             });
+            lucide.createIcons();
         }
 
         function renderDetails() {
@@ -510,149 +469,62 @@
             document.getElementById('detail-tag').innerText = selectedMainVersion.tag;
             document.getElementById('detail-desc').innerText = selectedMainVersion.description;
             
-            const editionContainer = document.getElementById('edition-list');
-            editionContainer.innerHTML = '';
-
+            const list = document.getElementById('edition-list');
+            list.innerHTML = '';
+            
             selectedMainVersion.editions.forEach(ed => {
                 const isActive = selectedEdition.id === ed.id;
-                const activeClass = isActive 
-                    ? 'active-edition ring-2 ring-primary/20 bg-primary/5' 
-                    : 'border-border bg-background hover:border-primary/40 hover:bg-accent/30';
-                const priceColor = ed.price === 0 ? 'text-green-500' : 'text-foreground';
-                const displayPrice = ed.price === 0 ? 'Miễn phí' : `$${ed.price}`;
-
+                const activeClass = isActive ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-border bg-card hover:border-primary/30';
+                
                 const div = document.createElement('div');
-                div.className = `relative flex cursor-pointer items-center gap-4 rounded-xl border p-4 transition-all ${activeClass}`;
-                div.onclick = () => selectEdition(ed.id);
+                div.className = `flex items-center gap-4 rounded-xl border p-4 cursor-pointer transition-all ${activeClass}`;
+                div.onclick = () => { selectedEdition = ed; renderDetails(); };
                 div.innerHTML = `
                     <div class="flex-1">
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="font-bold text-base text-foreground">${ed.name}</span>
-                            <span class="font-bold text-sm ${priceColor}">${displayPrice}</span>
-                        </div>
-                        <p class="text-sm text-muted-foreground">${ed.type}</p>
+                        <span class="font-bold block">${ed.name}</span>
+                        <span class="text-xs text-gray-500">${ed.type}</span>
                     </div>
-                    <div class="h-6 w-6 rounded-full border-2 border-muted-foreground/30 flex items-center justify-center transition-all ${isActive ? 'bg-primary border-primary text-white scale-110' : ''}">
-                         ${isActive ? '<i data-lucide="check" class="h-3.5 w-3.5"></i>' : ''}
-                    </div>
+                    ${isActive ? '<i data-lucide="check-circle" class="h-5 w-5 text-primary"></i>' : '<div class="h-5 w-5 rounded-full border border-gray-300"></div>'}
                 `;
-                editionContainer.appendChild(div);
+                list.appendChild(div);
             });
-
-            const finalPrice = selectedEdition.price === 0 ? '0 ₫' : `$${selectedEdition.price}`;
-            document.getElementById('total-price').innerText = finalPrice;
-            
-            const btnAction = document.getElementById('btn-action');
-            btnAction.innerHTML = selectedEdition.price === 0 
-                ? `Lấy Link Download <i data-lucide="arrow-right" class="h-5 w-5"></i>`
-                : `Mua Ngay <i data-lucide="shopping-cart" class="h-5 w-5"></i>`;
-
             lucide.createIcons();
         }
 
-        // --- ACTIONS ---
-        function selectVersion(id) {
-            selectedMainVersion = VERSIONS.find(v => v.id === id);
-            selectedEdition = selectedMainVersion.editions[0];
-            renderSidebar();
-            renderDetails();
-        }
-
-        function selectEdition(id) {
-            selectedEdition = selectedMainVersion.editions.find(e => e.id === id);
-            renderDetails();
-        }
-
+        // --- NAVIGATION ---
         function proceedToPayment() {
-            if (selectedEdition.price === 0) {
-                setupResult();
-                goToStep('result');
-            } else {
-                setupPayment();
-                goToStep('payment');
-            }
-        }
-
-        function setupPayment() {
-            document.getElementById('payment-item-name').innerText = selectedEdition.name;
-            document.getElementById('payment-item-price').innerText = `$${selectedEdition.price}`;
-            document.getElementById('btn-pay').innerText = `Thanh toán $${selectedEdition.price}`;
+            document.getElementById('pay-name').innerText = selectedEdition.name;
+            goToStep('payment');
         }
 
         function handlePaymentSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-pay');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin h-5 w-5 mr-2"></i> Đang xử lý...`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin h-5 w-5 inline"></i> Đang xử lý...`;
             lucide.createIcons();
-            btn.disabled = true;
-            btn.classList.add('opacity-70', 'cursor-not-allowed');
-
+            
             setTimeout(() => {
-                btn.disabled = false;
-                btn.classList.remove('opacity-70', 'cursor-not-allowed');
-                btn.innerHTML = originalText;
-                setupResult();
+                btn.innerHTML = "Tiến hành tải";
+                window.open(selectedEdition.link, '_blank'); // Direct Download
+                
+                document.getElementById('final-link').innerText = selectedEdition.link;
                 goToStep('result');
-            }, 1500);
-        }
-
-        function setupResult() {
-            document.getElementById('result-name').innerText = selectedEdition.name;
-            document.getElementById('result-card-name').innerText = selectedEdition.name;
-            document.getElementById('result-link').innerText = selectedEdition.link;
-            
-            let iconName = selectedMainVersion.icon || 'hard-drive';
-            const iconContainer = document.getElementById('result-icon').parentElement;
-            iconContainer.innerHTML = `<i data-lucide="${iconName}" class="h-10 w-10"></i>`;
-            lucide.createIcons();
-        }
-
-        function goToStep(stepName) {
-            document.getElementById('step-selection').classList.add('step-hidden');
-            document.getElementById('step-payment').classList.add('step-hidden');
-            document.getElementById('step-result').classList.add('step-hidden');
-
-            const target = document.getElementById(`step-${stepName}`);
-            target.classList.remove('step-hidden');
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Update Nav indicators
-            const steps = ['1', '2', '3'];
-            const stepMap = { 'selection': '1', 'payment': '2', 'result': '3' };
-            const currentIdx = steps.indexOf(stepMap[stepName]);
-
-            steps.forEach((s, idx) => {
-                const el = document.getElementById(`nav-step-${s}`);
-                if (idx === currentIdx) {
-                    el.className = 'text-primary font-bold transition-colors';
-                } else if (idx < currentIdx) {
-                    el.className = 'text-foreground font-medium transition-colors opacity-70';
-                } else {
-                    el.className = 'text-muted-foreground transition-colors';
-                }
-            });
-        }
-
-        function scrollToGrid() {
-            document.getElementById('selection-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function downloadFile() {
-            window.location.href = selectedEdition.link;
+            }, 1000);
         }
 
         function copyLink() {
             navigator.clipboard.writeText(selectedEdition.link);
-            const btn = document.querySelector('button[onclick="copyLink()"]');
-            const originalIcon = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="check" class="h-5 w-5 text-green-500"></i>`;
-            lucide.createIcons();
-            setTimeout(() => {
-                btn.innerHTML = originalIcon;
-                lucide.createIcons();
-            }, 2000);
+            alert("Đã sao chép link!");
+        }
+
+        function goToStep(step) {
+            ['selection', 'payment', 'result'].forEach(s => document.getElementById(`step-${s}`).classList.add('step-hidden'));
+            document.getElementById(`step-${step}`).classList.remove('step-hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToGrid() {
+            document.getElementById('selection-grid').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
